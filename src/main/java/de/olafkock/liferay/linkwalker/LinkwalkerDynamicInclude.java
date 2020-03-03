@@ -36,57 +36,65 @@ public class LinkwalkerDynamicInclude implements DynamicInclude {
 		ThemeDisplay td = (ThemeDisplay) httpServletRequest.getAttribute(WebKeys.THEME_DISPLAY);
 		if(td != null && 
 		   td.getPermissionChecker().isGroupAdmin(td.getScopeGroupId())) {
-	
 			PrintWriter pw = httpServletResponse.getWriter();
-			pw.println("<script>function linkwalkerUrlExists(element, callback) {\n" +
-					"   var href=element.attr(\"href\");\n" +
-					"	if (href != \";\" && ( href.startsWith(\"http\") || href.startsWith(\"/\"))) {\n" + 
-					"		var xhr = new XMLHttpRequest();\n" + 
-					"		xhr.onreadystatechange = function() {\n" + 
-					"			if (xhr.readyState === 4) {\n" + 
-					"				callback(xhr.status < 400, 'xhr'+xhr.status);\n" + 
-					"			}\n" + 
-					"		};\n" + 
-					"		xhr.onerror = function() {\n" + 
-					"			callback(false,'xhrerror');\n" + 
-					"		}\n" + 
-					"		xhr.open('HEAD', element.attr(\"href\"));\n" + 
-					"		xhr.send();\n" + 
-					"	}\n" + 
-					"}\n" + 
-					"\n" + 
-				// for widget pages
-				// Notice that selectors must be quite specific - see LPS-104516
-					"$(function() {\n" + 
-					"    $( \".portlet-body a\" ).each(function( index ) {\n" + 
-					"        var element = $(this);\n" + 
-					"        linkwalkerUrlExists(element, function(exists, hint) {\n" + 
-					"            console.log('\"%s\" exists?', element.attr(\"href\"), exists);\n" + 
-					"            if (!exists) {\n" + 
-					"                element.addClass(\"brokenlink\");\n" + 
-					"                element.addClass(hint);\n" + 
-					"            }\n" + 
-					"        });\n" + 
-					"    });\n" + 
-					"});\n" + 	
-				// for content pages
-					"$(function() {\n" + 
-					"    $( \"div#main-content a\" ).each(function( index ) {\n" + 
-					"        var element = $(this);\n" + 
-					"        linkwalkerUrlExists(element, function(exists, hint) {\n" + 
-					"            console.log('\"%s\" exists?', element.attr(\"href\"), exists);\n" + 
-					"            if (!exists) {\n" + 
-					"                element.addClass(\"brokenlink\");\n" + 
-					"                element.addClass(hint);\n" + 
-					"            }\n" + 
-					"        });\n" + 
-					"    });\n" + 
-					"});\n" + 
-					"</script>");
-			pw.println("<style>a.brokenlink {\n" + 
+			String layoutType = td.getLayout().getType();
+			if(layoutType.equals("content") || layoutType.equals("portlet")) {
+				pw.println("<script>"
+						+ "function linkwalkerUrlExists(element, callback) {\n" +
+						"   var href=element.attr(\"href\");\n" +
+						"	if (href != \";\" && ( href.startsWith(\"http\") || href.startsWith(\"/\"))) {\n" + 
+						"		var xhr = new XMLHttpRequest();\n" + 
+						"		xhr.onreadystatechange = function() {\n" + 
+						"			if (xhr.readyState === 4) {\n" + 
+						"				callback(xhr.status < 400, 'xhr'+xhr.status);\n" + 
+						"			}\n" + 
+						"		};\n" + 
+						"		xhr.onerror = function() {\n" + 
+						"			callback(false,'xhrerror');\n" + 
+						"		}\n" + 
+						"		xhr.open('HEAD', element.attr(\"href\"));\n" + 
+						"		xhr.send();\n" + 
+						"	}\n" + 
+						"}"
+				);
+				if(layoutType.equals("portlet")) {
+					pw.println(
+						"$(function() {\n" + 
+						"    $( \".portlet-body a\" ).each(function( index ) {\n" + 
+						"        var element = $(this);\n" + 
+						"        linkwalkerUrlExists(element, function(exists, hint) {\n" + 
+						"            console.log('\"%s\" exists?', element.attr(\"href\"), exists);\n" + 
+						"            if (!exists) {\n" + 
+						"                element.addClass(\"brokenlink\");\n" + 
+						"                element.addClass(hint);\n" + 
+						"            }\n" + 
+						"        });\n" + 
+						"    });\n" + 
+						"});"
+					);
+				} else if(layoutType.equals("content")) {
+					pw.println(
+						"$(function() {\n" + 
+						"    $( \"div#main-content a\" ).each(function( index ) {\n" + 
+						"        var element = $(this);\n" + 
+						"        linkwalkerUrlExists(element, function(exists, hint) {\n" + 
+						"            console.log('\"%s\" exists?', element.attr(\"href\"), exists);\n" + 
+						"            if (!exists) {\n" + 
+						"                element.addClass(\"brokenlink\");\n" + 
+						"                element.addClass(hint);\n" + 
+						"            }\n" + 
+						"        });\n" + 
+						"    });\n" + 
+						"});"						
+					);
+				}
+					
+				pw.println("</script>" + 
+					"<style>a.brokenlink {\n" + 
 					"    background-color: lightpink;\n" + 
 					"    text-decoration: line-through;\n" + 
 					"}</style>");
+			}
 		}
 	}
 
