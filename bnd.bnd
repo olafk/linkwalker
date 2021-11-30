@@ -1,3 +1,7 @@
-Bundle-Name: linkwalker-di
+Bundle-Name: linkwalker-tc
 Bundle-SymbolicName: de.olafkock.liferay.linkwalker
-Bundle-Version: 1.0.0
+Bundle-Version: 2.0.0
+-dsannotations-options: inherit
+-sources: true
+Liferay-Theme-Contributor-Type: linkwalker
+Web-ContextPath: /linkwalker-theme-contributor
