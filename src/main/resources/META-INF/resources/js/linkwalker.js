@@ -22,10 +22,19 @@ function linkwalkerUrlExists(element, callback) {
 		xhr.onreadystatechange = function() { 
 			if (xhr.readyState === 4) {
 				callback(xhr.status < 400, 'xhr'+xhr.status); 
-			} 
+			}
 		};
 		xhr.onerror = function() { 
-			callback(false,'xhrerror'); 
+	          switch (xhr.status) {
+              case 0:
+                  callback(false, "likelyCORSproblem");
+                  break;
+              default:
+            	  element.innerHTML += " (" + xhr.status + "!)";
+                  callback(false, "unknownProblem");
+                  break;
+	          }
+//			callback(false,'xhrerror'); 
 		}
 		xhr.open('HEAD', href); 
 		xhr.send(); 
@@ -47,7 +56,7 @@ var visitAndMarkLinks = function() {
 
 	contentPageLinks.forEach(function( element ) { 
         linkwalkerUrlExists(element, function(exists, hint) {
-            console.log('%s (%s) exists?', element.innerHTML, element.getAttribute("href"), exists); 
+            console.log('%s exists?', element.getAttribute("href"), exists); 
             if (!exists) {
                 element.classList.add("brokenlink"); 
                 element.classList.add(hint); 
