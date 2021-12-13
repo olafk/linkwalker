@@ -1,4 +1,4 @@
-# Linkwalker Dynamic Include
+# Linkwalker Theme Contributor
 
 This plugin will add some JS+CSS to each page that requests 
 links with a HEAD request and marks them pink and -striked through-
