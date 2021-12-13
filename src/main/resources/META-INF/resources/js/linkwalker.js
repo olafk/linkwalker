@@ -5,11 +5,14 @@
  * site does not allow access through CORS rules.
  * 
  * Based on a code suggestion by Jan Verweij, slightly edited on error handling,
- * and turned into a DynamicInclude to minimize interaction.
+ * and turned into a ThemeContributor to minimize interaction.
  * 
  * Due to LPS-104516 Widget Pages need to be handled separately: This code scans
  * only code from within portlets' bodies on a Widget Page. For Content Pages, 
  * the whole #main-content block will be tested.
+ * 
+ * External links often can't be resolved from the browser due to CORS. Those 
+ * (likely) false positives are marked in yellow instead of red.
  * 
  * @author Olaf Kock, Jan Verweij
  */
