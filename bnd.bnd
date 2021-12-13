@@ -1,6 +1,6 @@
 Bundle-Name: linkwalker-tc
 Bundle-SymbolicName: com.liferay.sales.linkwalker
-Bundle-Version: 2.0.0
+Bundle-Version: 2.0.1-SNAPSHOT
 -dsannotations-options: inherit
 -sources: true
 Liferay-Theme-Contributor-Type: linkwalker
